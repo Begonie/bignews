@@ -76,7 +76,6 @@
         //     }
         // });
 
-
         $.ajax({
             url: 'http://localhost:8080/api/v1/admin/user/info',
             type: 'get',
@@ -89,7 +88,6 @@
 
             }
         });
-
 
 
         ///(1).实例化ajax对象
@@ -108,6 +106,12 @@
         //     console.log(xhr.responseText)
         // };
 
+
+        //退出登入
+        $('.logout').click(function () {
+            localStorage.removeItem('token');
+            window.location.href = './login.html';
+        })
     </script>
 
 
