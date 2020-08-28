@@ -72,6 +72,129 @@
             </div>
         </div>
     </div>
+    <!-- 文章类别分类 -->
+    <script id="cat_list" type='text/html'>
+        <option>所有分类</option>
+        {{each data v}}
+        <option value="{{ v.id }}">{{v.name}}</option>
+        {{/each}}
+    </script>
+
+    <!-- 文章列表模板 -->
+    <script id='art_list' type="text/html">
+        {{ each data.data v}}
+        <tr>
+            <td>{{v.title}}</td>
+            <td>{{v.author}}</td>
+            <td>{{v.category}}</td>
+            <td class="text-center">{{v.date}}</td>
+            <td class="text-center">{{v.state}}</td>
+            <td class="text-center">
+                <a data-id="{{v.id}}" href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
+                <a data-id="{{v.id}}" href="javascript:void(0);" class="btn btn-danger btn-xs delete">删除</a>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
+
+
+
+
+    <script src="./libs/http.js"></script>
+
+    <script>
+        /*2.筛选功能
+* 细节：表单中的按钮会有一个默认提交事件，需要阻止默认行为
+2.1 按钮注册点击事件
+2.2 ajax发送请求（这个请求会多次调用，封装到函数中）
+2.3 数据响应之后使用模板引擎渲染页面
+2.4 页面一加载就请求所有的数据
+*/
+        /* 1.页面一加载：ajax请求所有分类列表 */
+        $.ajax({
+            url: bignew.category_list,
+            type: 'get',
+            dataType: 'json',
+            success: function (backData) {
+                // console.log(backData);
+                $('#selCategory').html(template('cat_list', backData))
+            }
+        });
+
+        //加载文章列表
+
+        // $.ajax({
+        //     url: bignew.article_query,
+        //     type: 'get',
+        //     dataType: 'json',
+        //     data: {
+        //         type: '',
+        //         state: '',
+        //         page: 1,
+        //         perpage: 10
+        //     },
+        //     success: function (backData) {
+        //         // console.log(backData);
+        //         $('table>tbody').html(template('art_list', backData));
+        //     }
+        // });
+
+
+
+        // 筛选按钮.点击事件 
+        $('#btnSearch').click(function (e) {
+            //阻止默认跳转
+            e.preventDefault();
+            $.ajax({
+                url: bignew.article_query,
+                type: 'get',
+                dataType: 'json',
+                data: {
+                    type: $('#selCategory').val(),
+                    state: $('#selStatus').val(),
+                    page: 1,
+                    perpage: 10
+                },
+                success: function (backData) {
+                    console.log(backData);
+                    $('table>tbody').html(template('art_list', backData));
+                }
+            });
+        })
+
+
+        // /* 2.页面以及在：ajax请求所有文章列表 */
+
+
+        $('#btnSearch').click();
+
+
+        /* 3筛选按钮.点击事件 
+        注意点：筛选按钮在form表单中，需要阻止默认跳转
+                   */
+        // $('#btnSearch').click(function (e) {
+        //     e.preventDefault();
+        //     $.ajax({
+        //         url: bignew.article_query,
+        //         type: 'get',
+        //         dataType: 'json',
+        //         data: {
+        //             type: $('#selCategory').val(),
+        //             state: $('#selStatus').val(),
+        //             page: 1,
+        //             perpage: 10
+        //         },
+        //         success: function (backData) {
+        //             $('table>tbody').html(template('art_list', backData));
+        //         }
+        //     });
+
+        // });
+
+        // /* 2.页面以及在：ajax请求所有文章列表 */
+        // //主动触发筛选按钮点击事件 : 注意点，要先注册筛选按钮点击事件，然后才可以调用
+        // $('#btnSearch').click();
+    </script>
 </body>
 
 </html>

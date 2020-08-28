@@ -8,7 +8,7 @@
         user_edit: baseURL + '/admin/user/edit', //用户编辑
         category_list: baseURL + '/admin/category/list', //文章类别查询
         category_add: baseURL + '/admin/category/add', //文章类别新增
-        category_search: baseURL + '/admin/category/search', //文章类别搜索
+        category_search: baseURL +'/admin/category/search', //文章类别搜索
         category_edit: baseURL + '/admin/category/edit', //文章类别编辑
         category_delete: baseURL + '/admin/category/delete', //文章类别删除
         article_query: baseURL + '/admin/article/query', //文章搜索
