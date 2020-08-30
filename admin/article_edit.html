@@ -14,6 +14,12 @@
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 模板引擎 -->
     <script src="./libs/template-web.js"></script>
+
+    <link rel="stylesheet" href="libs/jedate/css/jeDate-test.css">
+    <link rel="stylesheet" href="libs/jedate/css/jedate.css">
+    <script src="libs/jedate/js/jedate.js"></script>
+    <script src="libs/wangEditor.min.js"></script>
+    <script src="libs/http.js"></script>
 </head>
 
 <body>
@@ -51,11 +57,23 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">发布时间：</label>
                     <div class="col-sm-4">
+                        <!-- 日期插件 -->
+                        <div class="jeitem">
+                            <div class="jeinpbox">
+                                <input type="text" name="date" class="jeinput" id="testico" placeholder="YYYY-MM-DD">
+                                <div class="icons jebtns"
+                                    onclick="jeDate('#testico',{trigger:false,format: 'YYYY-MM-DD',theme: { bgcolor: '#00A680', pnColor: '#00DDAA' },zIndex:10001})">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
                     <div class="col-sm-10">
+                        <!-- 本文本编辑插件 -->
+                        <div id="editor">
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -67,6 +85,126 @@
             </form>
         </div>
     </div>
+    <!-- 文章分类模板 -->
+    <script id="art_list" type="text/html">
+        {{each data v}}
+        <option value="{{v.id}}">{{v.name}}</option>
+        {{/each}}
+    </script>
+    <script>
+        //完成日期插件和文本编辑器插件
+        //获取传递的id
+        //ajax请求文章分类
+        //ajax请求文章信息（渲染整个页面）
+        // 文件预览，晚间上传
+        $(function () {
+
+            //日期插件和文本插件初始化
+            jeDate("#testico", {
+                isinitVal: true,
+                festival: true,
+                format: "YYYY-MM-DD",
+                isTime: false,
+                minDate: "2014-09-19 00:00:00",
+                zIndex: 10001
+            });
+
+            var E = window.wangEditor
+            var editor = new E('#editor')
+            // 或者 var editor = new E( document.getElementById('editor') )
+            editor.create();
+
+
+            //获取传递的id
+            let id = window.location.href.split('=')[1];
+            console.log(id);
+
+            $.ajax({
+                url: bignew.category_list,
+                type: 'get',
+                dataType: 'json',
+                success: function (backData) {
+                    // console.log(backData);
+                    $('.category').html(template('art_list', backData))
+
+                    //   先加载分类，在加载文章
+                    getarticletatail();
+                }
+            });
+
+            //渲染整个页面详情
+            function getarticletatail() {
+                $.ajax({
+                    url: bignew.article_search,
+                    type: 'get',
+                    dataType: 'json',
+                    data: {
+                        id: id
+                    },
+                    success: function (backData) {
+                        // console.log(backData);
+                        //渲染页面
+                        $('.title').val(backData.data.title);
+                        $('.article_cover').attr('src', backData.data.cover);
+                        $('.category').val(backData.data.categoryId);
+                        $('.jeinput').val(backData.data.date);
+                        editor.txt.html(backData.data.content);
+                    }
+                });
+            }
+
+            //  文件预览
+            //1.给file表单元素注册onchange事件
+            $('#inputCover').change(function () {
+                //1.2 获取用户选择的图片
+                let file = this.files[0];
+                //1.3 将文件转为src路径
+                let url = URL.createObjectURL(file);
+                //1.4 将url路径赋值给img标签的src
+                $('.article_cover').attr('src', url);
+            });
+
+            //文章发布
+
+
+
+
+            $('.btn-edit,.btn-draft').on('click', function (e) {
+                //禁用表单默认提交事件
+                e.preventDefault();
+                //创建FormData对象：参数是表单dom对象
+
+                let fd = new FormData($('form')[0]);
+
+
+                fd.append('id', id);
+                fd.append('content', editor.txt.html());
+                fd.append('state', $(this).text()=='修改' ? '已发布' : '草稿');
+                $.ajax({
+                    url: bignew.article_edit,
+                    type: 'post',
+                    dataType: 'json',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    success: function (backData) {
+                        console.log(backData);
+                        if (backData.code == 200) {
+                            alert('编辑成功');
+                            window.history.back();
+
+                        }
+                    }
+                });
+            });
+
+
+
+
+
+
+        })
+    </script>
 </body>
 
 </html>

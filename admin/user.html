@@ -104,30 +104,29 @@
         });
 
         //修改
-           $('.btn-edit').click(function(e){
-                  //阻止默认跳转
-                  e.preventDefault();
-                  let fd=new FormData($('form')[0]);
+        $('.btn-edit').click(function (e) {
+            //阻止默认跳转
+            e.preventDefault();
+            let fd = new FormData($('form')[0]);
             $.ajax({
-                url:bignew.user_edit,
-                type:'post',
-                dataType:'json',
-                data:fd,
-                processData:false,
-                contentType:false,
-                success: function(backData){
+                url: bignew.user_edit,
+                type: 'post',
+                dataType: 'json',
+                data: fd,
+                processData: false,
+                contentType: false,
+                success: function (backData) {
                     console.log(backData);
-                    if(backData.code==200){
+                    if (backData.code == 200) {
                         alert('修改成功');
                         window.parent.location.reload();
-                    }else{
+                    } else {
                         alert(backData.msg);
                     }
-            
                 }
             });
 
-           });
+        });
     </script>
 </body>
 
