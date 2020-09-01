@@ -99,9 +99,6 @@
         {{/each}}
     </script>
 
-
-
-
     <script src="./libs/http.js"></script>
 
     <script>
@@ -122,7 +119,6 @@
                 $('#selCategory').html(template('cat_list', backData))
             }
         });
-
 
         // 筛选按钮.点击事件 
         $('#btnSearch').click(function (e) {
@@ -160,10 +156,6 @@
                 }
             });
         })
-
-
-
-
         // /* 2.页面以及在：ajax请求所有文章列表 */
 
         $('#btnSearch').trigger('click');
@@ -187,9 +179,6 @@
                 }
             });
         }
-     
-   
-
 
         //删除文章功能
         $('table>tbody').on('click', '.delete', function () {
@@ -213,8 +202,10 @@
             });
         });
 
-
-        
+        //点击文章发表按钮，侧边栏的样式要对应变成黄色
+        $('#release_btn').click(function () {
+            $('.level02>li:eq(1)', window.parent.document).addClass('active').siblings().removeClass('active');
+        });
     </script>
 </body>
 
