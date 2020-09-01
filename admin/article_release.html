@@ -81,7 +81,7 @@
             </form>
         </div>
     </div>
-     <!-- 文章类别模板 -->
+    <!-- 文章类别模板 -->
     <script id="art_list" type="text/html">
         {{each data v}}
         <option value="{{v.id}}">{{v.name}}</option>
@@ -119,41 +119,40 @@
 
         // 渲染文章类别
         $.ajax({
-            url:bignew.category_list,
-            type:'get',
-            success: function(backData){
+            url: bignew.category_list,
+            type: 'get',
+            success: function (backData) {
                 console.log(backData);
-                $('.category').html(template('art_list',backData));
-        
+                $('.category').html(template('art_list', backData));
+
             }
         });
-        
+
         //发布文章，ajax请求
-       $('.btn-release,.btn-draft').on('click',function(e){
-           e.preventDefault();
-           let fd=new FormData($('form')[0]);
-           fd.append('content',editor.txt.html());
-           fd.append('state',$(this).text()=='发布'?'已发布':'草稿');
-           $.ajax({
-               url:bignew.article_publish,
-               type:'post',
-               dataType:'json',
-               data:fd,
-               processData:false,
-               contentType:false,
-               success: function(backData){
-                   console.log(backData);
-                   if(backData.code==200){
-                       alert('编辑成功');
-                       window.history.back();
-                   }else{
-                       alert('编辑失败');
-                   }
-               }
-           });
+        $('.btn-release,.btn-draft').on('click', function (e) {
+            e.preventDefault();
+            let fd = new FormData($('form')[0]);
+            fd.append('content', editor.txt.html());
+            fd.append('state', $(this).text() == '发布' ? '已发布' : '草稿');
+            $.ajax({
+                url: bignew.article_publish,
+                type: 'post',
+                dataType: 'json',
+                data: fd,
+                processData: false,
+                contentType: false,
+                success: function (backData) {
+                    console.log(backData);
+                    if (backData.code == 200) {
+                        alert('编辑成功');
+                        window.history.back();
+                    } else {
+                        alert('编辑失败');
+                    }
+                }
+            });
 
-       });
-
+        });
     </script>
 </body>
 

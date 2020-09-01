@@ -60,24 +60,10 @@
         <div class="column_pannel" id="column_show"></div>
     </div>
 
-
     <!-- 折线图 -->
     <script>
         (function () {
-            // var json = '{"code":200,"msg":"获取成功","date":[{"date":"2019-05-20","count":23},{"date":"2019-05-21","count":19},{"date":"2019-05-22","count":29},{"date":"2019-05-23","count":24},{"date":"2019-05-24","count":28},{"date":"2019-05-25","count":28},{"date":"2019-05-26","count":19},{"date":"2019-05-27","count":25},{"date":"2019-05-28","count":25}]}';
-            // var obj = JSON.parse(json);
-            // loadEchars(obj);
 
-            // $.ajax({
-            //     url:'http://localhost:8080/api/v1/admin/data/article',
-            //     type:'get',
-            //     dataType:'json',
-            //     success: function(backData){
-            //         console.log(backData);
-            //      let obj=JSON.parse(backData.date)
-
-            //     }
-            // });
             //(1).实例化ajax对象
             let date = [];
             let data = [];
@@ -92,9 +78,10 @@
             xhr.send();
             //(5).注册回调函数
             xhr.onload = function () {
-
-                //    console.log(xhr.responseText);
+                console.log(xhr.responseText);
                 let obj = JSON.parse(xhr.responseText);
+                console.log(obj);
+
                 for (var i = 0; i < obj.date.length; i++) {
                     data.push(obj.date[i].count);
                     date.push(obj.date[i].date);
@@ -105,7 +92,7 @@
             };
 
 
-            function loadEchars(obj) {
+            function loadEchars() {
                 // 基于准备好的dom，初始化echarts实例
                 var myChart = echarts.init(document.getElementById('curve_show'));
 
@@ -186,91 +173,97 @@
 
     <!-- 环形图 -->
     <script>
-        //(1).实例化ajax对象
-        let xhr = new XMLHttpRequest();
-        //(2).设置请求方法和地址
-        //get请求的数据直接添加在url的后面 格式是 url?key=value
-        xhr.open('get', 'http://localhost:8080/api/v1/admin/data/category');
-        //(3).发送请求
+        (function () {
+            //(1).实例化ajax对象
+            let xhr = new XMLHttpRequest();
+            //(2).设置请求方法和地址
+            //get请求的数据直接添加在url的后面 格式是 url?key=value
+            xhr.open('get', 'http://localhost:8080/api/v1/admin/data/category');
+            //(3).发送请求
 
-        xhr.setRequestHeader('Authorization',
-            'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiYWRtaW4iLCJleHAiOjIyMDM1OTUyNzQsImlhdCI6MTU5ODc5NTI3NH0.Goi5bfGyXQeuKTD--GXBRLv0PayYEcklW5rzZAaEoSj8i4RLOTRQ7mXrGCwflYz55fz48vnDW-aGWVhRyYFOo-aaC1SAalbRU36JPVZbudbWph2IjjLm7M6NslyKKhZvhycgr4MZBY_N-xsgt-hRm03p8mlhqfhjrr0DH48bR3I'
-        );
-        xhr.send();
-        // (4).注册回调函数
-        xhr.onload = function () {
-            // console.log(xhr.responseText)
-            let obj = JSON.parse(xhr.responseText)
-            console.log(obj);
-            for (let i = 0; i < obj.date.length; i++) {
-                console.log(obj.date[i]);
-            }
-            
-
-            // 基于准备好的dom，初始化echarts实例
-            var myChart1 = echarts.init(document.getElementById('pie_show'));
-            console.log(obj.date[0].name);
-            console.log(obj.date[1].name);
-            console.log(obj.date[3].articles);
-            option1 = {
-                
-                title: {
-                    left: 'center',
-                    text: '分类文章数量比',
-                },
-                tooltip: {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b}: {c} ({d}%)"
-                },
-                legend: {
-                    orient: 'horizontal',
-                    x: 'center',
-                    // data: ['爱生活', '趣美味', '爱旅行', '爱电影', '爱保健'],
-                    data: ['obj.date[0].name', 'obj.date[1].name', 'obj.date[2].name', 'obj.date[3].name', 'obj.date[4].name'],
-                    top: 30
-                },
-                color: ['#5885e8', '#13cfd5', '#00ce68', '#ff9565', '#20ff19'],
-                series: [{
-                    name: '分类名称',
-                    type: 'pie',
-                    radius: ['30%', '50%'],
-                    avoidLabelOverlap: false,
-                    label: {
-                        emphasis: {
-                            show: true,
-                            textStyle: {
-                                fontSize: '30',
-                                fontWeight: 'bold'
-                            }
-                        }
-                    },
-                    data: [{
-                            value: obj.date[0].articles,
-                            name: '爱生活'
-                        },
-                        {
-                            value: obj.date[1].articles,
-                            name: '趣美味'
-                        },
-                        {
-                            value: obj.date[2].articles,
-                            name: '爱旅行'
-                        },
-                        {
-                            value: obj.date[3].articles,
-                            name: '爱电影'
-                        },
-                        {
-                            value: obj.date[4].articles,
-                            name: '爱保健'
-                        }
-                    ]
-                }]
+            xhr.setRequestHeader('Authorization',
+                'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiYWRtaW4iLCJleHAiOjIyMDM1OTUyNzQsImlhdCI6MTU5ODc5NTI3NH0.Goi5bfGyXQeuKTD--GXBRLv0PayYEcklW5rzZAaEoSj8i4RLOTRQ7mXrGCwflYz55fz48vnDW-aGWVhRyYFOo-aaC1SAalbRU36JPVZbudbWph2IjjLm7M6NslyKKhZvhycgr4MZBY_N-xsgt-hRm03p8mlhqfhjrr0DH48bR3I'
+            );
+            xhr.send();
+            // (4).注册回调函数
+            xhr.onload = function () {
+                // console.log(xhr.responseText)
+                let obj = JSON.parse(xhr.responseText)
+                // console.log(obj);
+                // for (let i = 0; i < obj.date.length; i++) {
+                //     // console.log(obj.date[i]);
+                // }
+                // console.log(obj.date[0].name);
+                // console.log(obj.date[1].name);
+                // console.log(obj.date[3].articles);
+                getcommentlist(obj)
             };
-            // 使用刚指定的配置项和数据显示图表。
-            myChart1.setOption(option1);
 
-        };
+            function getcommentlist(obj) {
+                // 基于准备好的dom，初始化echarts实例
+                var myChart1 = echarts.init(document.getElementById('pie_show'));
+
+                option1 = {
+
+                    title: {
+                        left: 'center',
+                        text: '分类文章数量比',
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b}: {c} ({d}%)"
+                    },
+                    legend: {
+                        orient: 'horizontal',
+                        x: 'center',
+                        // data: ['爱生活', '趣美味', '爱旅行', '爱电影', '爱保健'],
+                        data: [obj.date[0].name, obj.date[1].name, obj.date[2].name, obj.date[3].name,
+                            obj.date[7].name
+                        ],
+                        top: 30
+                    },
+                    color: ['#5885e8', '#13cfd5', '#00ce68', '#ff9565', '#20ff19'],
+                    series: [{
+                        name: '分类名称',
+                        type: 'pie',
+                        radius: ['30%', '50%'],
+                        avoidLabelOverlap: false,
+                        label: {
+                            emphasis: {
+                                show: true,
+                                textStyle: {
+                                    fontSize: '30',
+                                    fontWeight: 'bold'
+                                }
+                            }
+                        },
+                        data: [{
+                                value: obj.date[0].articles,
+                                name: obj.date[0].name
+                            },
+                            {
+                                value: obj.date[1].articles,
+                                name: obj.date[1].name
+                            },
+                            {
+                                value: obj.date[2].articles,
+                                name: obj.date[2].name
+                            },
+                            {
+                                value: obj.date[3].articles,
+                                name: obj.date[3].name
+                            },
+                            {
+                                value: obj.date[7].articles,
+                                name: obj.date[7].name
+                            }
+                        ]
+                    }]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart1.setOption(option1);
+            }
+        })()
     </script>
     <!-- 柱状图 -->
     <script>
